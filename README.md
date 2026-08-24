@@ -1,7 +1,7 @@
-### NAME:
-### ROLL NO :
-### DEPARTMENT 
-### DATE
+### NAME: PARAVEZHAA M
+### ROLL NO :212225220070
+### DEPARTMENT IT
+### DATE 24/08/2026
 
 
 
@@ -138,16 +138,74 @@ Run the Python script.
 
 Check if the message appears in the HiveMQ Web Client.
 ## PROGRAM
-[
+[ import time import paho.mqtt.client as mqtt
 
+broker = "f11124e34585481a9d15e9c9384521a6.s1.eu.hivemq.cloud" port = 8883 topic = "iot/demo/sensor"
 
+username = "hivemq.webclient.1786079428649" password = "LggVkqttlSmluxpBhPhuFPA25dsx@d54"
 
+client = mqtt.Client( client_id="python-publisher-001", callback_api_version=mqtt.CallbackAPIVersion.VERSION2 )
 
+client.username_pw_set(username, password) client.tls_set()
 
+def on_connect(client, userdata, flags, reason_code, properties): print("Connected to broker, reasonCode:", reason_code)
+
+def on_publish(client, userdata, mid, reason_code, properties): print("on_publish called, mid:", mid)
+
+def on_disconnect(client, userdata, disconnect_flags, reason_code, properties): print("Disconnected, reasonCode:", reason_code)
+
+client.on_connect = on_connect client.on_publish = on_publish client.on_disconnect = on_disconnect
+
+client.connect(broker, port, keepalive=60)
+
+client.loop_start()
+
+message = "PARAVEZHAA M - 212225220070"
+
+info = client.publish( topic, payload=message, qos=1, retain=True )
+
+info.wait_for_publish()
+
+time.sleep(0.2)
+
+client.loop_stop() client.disconnect()
+
+print(f"Message '{message}' published to topic '{topic}' (qos=1 retain=True)")
 ]
 
 ### OUTPUT SCREENSHOTS
+<img width="1674" height="940" alt="iiot 5-2" src="https://github.com/user-attachments/assets/2ee533df-5fbc-467f-a526-2ae6280ce413" />
+<img width="1774" height="887" alt="iiot 5-1" src="https://github.com/user-attachments/assets/75f0731d-33de-4350-b064-b8e2afb1031b" />
 
+
+## PROGRAM
+
+import paho.mqtt.client as mqtt
+import time
+import random
+import ssl
+broker = "f11124e34585481a9d15e9c9384521a6.s1.eu.hivemq.cloud"
+port = 8883
+topic = "iot/demo/sensor"
+username = "hivemq.webclient.1786078517977"
+password = "0KL!!CdbEDG6AgrP9ESN7D&GEMQQruH&"
+client = mqtt.Client(
+    client_id="publisher",
+    callback_api_version=mqtt.CallbackAPIVersion.VERSION2
+)
+client.username_pw_set(username, password)
+client.tls_set(tls_version=ssl.PROTOCOL_TLS)
+client.connect(broker, port)
+while True:
+    temperature = round(random.uniform(20.0, 30.0), 2)
+    humidity = round(random.uniform(30.0, 70.0), 2)
+    payload = f"Temperature: {temperature:.2f} C, Humidity: {humidity:.2f}%"
+    client.publish(topic, payload)
+    print(f"Published: {payload} -> {topic}")
+    time.sleep(5)
+## OUTPUT SCREENSHOTS
+<img width="1721" height="914" alt="iiot 5-3" src="https://github.com/user-attachments/assets/c30b9a02-c67c-4cd9-abbe-0892bd004d70" />
+<img width="1750" height="899" alt="iiot 5-4" src="https://github.com/user-attachments/assets/0c3ef9fc-d7c4-4e12-81c8-b9ca6baeb804" />
 
 
 ## Results
